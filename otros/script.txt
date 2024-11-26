@@ -1,0 +1,75 @@
+//Funcion para agregar cliente
+document.getElementById('formCliente').addEventListener('submit', function(e){
+    e.preventDefault();
+    let id = document.getElementById('id_cliente').value;
+    let nombre = document.getElementById('nombre').value;
+    let primer_apellido = document.getElementById('primer_apellido').value;
+    let segundo_apellido = document.getElementById('segundo_apellido').value;
+    let telefono_1 = document.getElementById('telefono_1').value;
+    let telefono_2 = document.getElementById('telefono_2').value;
+    let email = document.getElementById('email').value;
+
+    
+    //Objeto que recoge la información
+let cliente = {
+    id: id,
+    nombre: nombre,
+    primer_apellido: primer_apellido,
+    segundo_apellido: segundo_apellido,
+    telefono_1: telefono_1,
+    telefono_2: telefono_2,
+    email: email
+}
+
+agregarCliente(cliente);
+resetForm();
+});
+
+
+//Agregar cliente
+function agregarCliente(cliente) {
+    const tabla = document.getElementById('clientes');
+    const row = document.createElement('tr');
+
+   //Id clientes
+    const idCliente = cliente.id;
+
+    row.innerHTML = `
+        <td>${cliente.id}</td>
+        <td>${cliente.nombre}</td>
+        <td>${cliente.primer_apellido}</td>
+        <td>${cliente.segundo_apellido}</td>
+        <td>${cliente.telefono_1}</td>
+        <td>${cliente.telefono_2 || 'N/A'}</td>
+        <td>${cliente.email}</td>
+        <td><button class="btn btn-danger btn-sm" onclick="eliminarCliente('${cliente.id}', this)">Eliminar</button> 
+        </td>
+    `;
+    tabla.appendChild(row);
+}
+
+function resetForm(){
+    document.getElementById('formCliente').reset();
+}
+
+/* function eliminarCliente(idCliente, button) {
+    fetch(`http://localhost:5500/index.html/${idCliente}`,{
+        method: 'DELETE'
+    })
+    .then (response => {
+        if (response.ok) {
+            const row = button.parentNode.parentNode;
+            row.parentNode.removeChild(row);
+        } else {
+            console.error('Error al eliminar el cliente', response.status, response.statusText);
+        }
+    })
+    .catch(error => console.error('Error:', error));
+
+} */
+
+function eliminarCliente(idCliente, button) {
+    const row = button.parentNode.parentNode;
+    row.parentNode.removeChild(row);
+    alert(`Cliente con eliminado.`);
+}

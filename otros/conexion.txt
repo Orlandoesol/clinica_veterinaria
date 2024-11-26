@@ -1,0 +1,17 @@
+const {Client} = require('pg')
+const client = new Client({
+    user: 'postgres',
+    host: 'localhost',
+    database: 'db_clinica_veterinaria',
+    password: 'Admin12345*',
+    port: 5432
+})
+
+client.connect()
+.then(() => console.log("Coneccion Exitosa!!"))
+.then(() => client.query("SELECT * FROM clientes"))
+// .then(() => client.query("SELECT c.nombre || ' ' || c.primer_apellido || ' ' || c.segundo_apellido AS cliente, COUNT(p.id_Paciente) AS total_pacientes FROM clientes c LEFT JOIN paciente p ON c.id_cliente = p.id_Paciente_cliente GROUP BY c.id_cliente"))
+//.then(() => client.query("INSERT INTO clientes (id_cliente, nombre, primer_apellido, segundo_apellido, telefono_1, telefono_2, email) VALUES (1095689566, 'Margarita', 'Marin', 'Ocampo', '32156897456', '311563365896', 'margarita@email.com')"))
+.then(res => console.table(res.rows))
+.catch((err) => console.log(err))
+.finally(() => client.end())
