@@ -1,5 +1,5 @@
 {
-  "name": "db_clinica_veterinaria",
+  "name": "clinica_veterinaria",
   "version": "1.0.0",
   "type": "module",
   "main": "index.js",

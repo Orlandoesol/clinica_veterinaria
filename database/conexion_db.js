@@ -3,6 +3,7 @@ import pg from 'pg';
 
 const { Pool } = pg;
 
+
 const connectionString = process.env.DATABASE_URL;
 
 export const db = new Pool({
@@ -14,7 +15,10 @@ export const db = new Pool({
 //Probar conexion
 try {
     await db.query('SELECT NOW()');
-    console.log("Conexion Exitosa!!");
+    console.log("Conexión Exitosa!!");
 } catch (error) {
     console.log(error);
 }
+
+//Como probar la conexión
+//node database/conexion_db.js
