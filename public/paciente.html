@@ -80,10 +80,18 @@
                         <input type="number" min="1" max="20" class="form-control w-100" name="peso" id="peso" required>
                     </div>
                 </div>
+                <div class="col-12 col-md-4 mb-1">
+                    <div class="form-group">
+                        <label for="id_cliente">ID Dueño</label>
+                        <input type="number" class="form-control w-100" name="id_cliente"
+                        min="1" max="99999999" title="Por favor ingrese un ID válido entre 1 y 99,999,999" id="id_cliente" required>
+                    </div>
+                </div>
+
                 
             <div class="btn-group mt-3">
-                <button type="submit" class="btn btn-primary mx-3 rounded w-100">Enviar</button>
-                <button type="reset" class="btn btn-outline-primary mx-3 rounded w-100">Borrar</button>
+                <button type="submit" class="btn btn-primary mx-5 rounded w-100">Enviar</button>
+                <button type="reset" class="btn btn-outline-primary mx-5 rounded w-100">Borrar</button>
             </div>           
         </form>
       <table class="table table-bordered table-striped table-hover mt-4">

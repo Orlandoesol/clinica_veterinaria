@@ -1,0 +1,92 @@
+Los códigos de error HTTP (Protocolo de Transferencia de Hipertexto) 
+son números que indican el resultado de una solicitud realizada a un servidor web. 
+Estos códigos están organizados en categorías, y cada uno tiene un significado específico, 
+que puede ser interpretado por el cliente (como un navegador web) para entender 
+si la solicitud fue exitosa o si ocurrió algún problema.
+
+Los códigos de estado HTTP se agrupan en cinco categorías principales:
+
+1. Códigos 1xx (Informativos)
+Los códigos de estado de esta categoría indican que la solicitud se está procesando. 
+Son respuestas intermedias, por lo general no son visibles para el usuario final.
+
+100 Continue: El servidor ha recibido los encabezados de la solicitud y el cliente debe continuar enviando 
+el cuerpo de la solicitud.
+101 Switching Protocols: El servidor acepta cambiar a otro protocolo, como se solicitó en los encabezados.
+102 Processing: El servidor ha recibido y está procesando la solicitud, pero aún no ha terminado.
+
+2. Códigos 2xx (Éxito)
+Estos códigos indican que la solicitud fue recibida, entendida y procesada correctamente por el servidor.
+
+200 OK: La solicitud fue exitosa y el servidor ha devuelto la respuesta.
+201 Created: La solicitud fue exitosa y ha resultado en la creación de un recurso.
+202 Accepted: La solicitud ha sido aceptada para su procesamiento, pero aún no se ha completado.
+204 No Content: La solicitud fue exitosa, pero el servidor no devuelve contenido.
+205 Reset Content: El servidor ha procesado la solicitud y el cliente debe restablecer la vista del documento.
+206 Partial Content: El servidor está enviando solo una parte de los recursos solicitados, 
+útil para solicitudes parciales.
+
+3. Códigos 3xx (Redirección)
+Indican que el cliente necesita realizar acciones adicionales para completar la solicitud. 
+Esto generalmente implica una redirección a una nueva ubicación.
+
+300 Multiple Choices: Hay múltiples opciones de respuesta, y el cliente debe elegir una.
+301 Moved Permanently: El recurso solicitado ha sido movido permanentemente a una nueva URL.
+302 Found: El recurso solicitado se encuentra en una ubicación temporalmente diferente.
+303 See Other: El cliente debe consultar otro recurso, generalmente usando un método GET.
+304 Not Modified: El recurso no ha sido modificado desde la última solicitud del cliente.
+305 Use Proxy: La solicitud debe ir a través de un proxy especificado.
+307 Temporary Redirect: El recurso se encuentra en una ubicación temporalmente diferente 
+(similar a 302, pero más estricta).
+308 Permanent Redirect: Similar a 301, pero en una redirección permanente.
+
+4. Códigos 4xx (Errores del cliente)
+Los códigos de esta categoría indican que hubo un error en la solicitud del cliente. 
+Pueden ser causados por una solicitud incorrecta o mal formada.
+
+400 Bad Request: La solicitud no puede ser procesada debido a una sintaxis incorrecta.
+401 Unauthorized: El cliente no está autenticado o no tiene los permisos adecuados para acceder al recurso.
+402 Payment Required: Este código está reservado para futuras implementaciones, generalmente para indicar 
+    que se requiere pago.
+403 Forbidden: El servidor ha comprendido la solicitud, pero se niega a autorizarla.
+404 Not Found: El recurso solicitado no se encuentra en el servidor.
+405 Method Not Allowed: El método HTTP utilizado no está permitido para el recurso solicitado.
+406 Not Acceptable: El recurso solicitado no puede ser entregado en el formato que el cliente acepta.
+407 Proxy Authentication Required: El cliente debe autenticarse con un proxy.
+408 Request Timeout: El servidor ha agotado el tiempo de espera para la solicitud del cliente.
+409 Conflict: Hay un conflicto con el estado actual del recurso, como una solicitud incompatible.
+410 Gone: El recurso solicitado ya no está disponible y no se espera que vuelva.
+411 Length Required: La solicitud debe incluir un encabezado Content-Length que no está presente.
+412 Precondition Failed: Una de las condiciones predefinidas de la solicitud ha fallado.
+413 Payload Too Large: El tamaño del cuerpo de la solicitud es demasiado grande para ser procesado.
+414 URI Too Long: La URI solicitada es demasiado larga.
+415 Unsupported Media Type: El tipo de medio de la solicitud no es compatible.
+416 Range Not Satisfiable: El rango solicitado no está disponible para el recurso.
+417 Expectation Failed: La expectativa definida en el encabezado de la solicitud no puede cumplirse.
+418 I'm a teapot: Un código de error humorístico definido en el protocolo de la "IETF" 
+    (Internet Engineering Task Force) en el RFC 2324.
+421 Misdirected Request: La solicitud fue dirigida a un servidor incorrecto.
+422 Unprocessable Entity: La solicitud está bien formada, pero no se puede procesar debido a errores semánticos.
+423 Locked: El recurso está bloqueado y no puede ser accedido.
+424 Failed Dependency: La solicitud ha fallado debido a un fallo de dependencia en otro recurso.
+426 Upgrade Required: El cliente debe actualizar a un protocolo más reciente.
+428 Precondition Required: El servidor requiere que la solicitud incluya una condición previa.
+429 Too Many Requests: El cliente ha enviado demasiadas solicitudes en un corto período.
+431 Request Header Fields Too Large: Los campos de los encabezados de la solicitud son demasiado grandes.
+451 Unavailable For Legal Reasons: El recurso no está disponible por razones legales.
+
+5. Códigos 5xx (Errores del servidor)
+Indican que el servidor ha fallado al procesar una solicitud válida. El error es del servidor, no del cliente.
+
+500 Internal Server Error: El servidor encontró un error inesperado y no pudo procesar la solicitud.
+501 Not Implemented: El servidor no soporta la funcionalidad necesaria para cumplir con la solicitud.
+502 Bad Gateway: El servidor actúa como un gateway o proxy y recibió una respuesta inválida del servidor upstream.
+503 Service Unavailable: El servidor no está disponible debido a sobrecarga o mantenimiento.
+504 Gateway Timeout: El servidor actúa como un gateway y no recibió una respuesta a tiempo de otro servidor.
+505 HTTP Version Not Supported: El servidor no soporta la versión HTTP utilizada en la solicitud.
+506 Variant Also Negotiates: El servidor tiene un error de configuración relacionado con la negociación de contenido.
+507 Insufficient Storage: El servidor no tiene suficiente espacio para completar la solicitud.
+508 Loop Detected: El servidor detectó un bucle infinito durante el procesamiento de la solicitud.
+510 Not Extended: La solicitud requiere una extensión del servidor que no está disponible.
+    Estos códigos permiten tanto a los desarrolladores como a los administradores de sistemas 
+    identificar y solucionar problemas de manera eficiente al hacer solicitudes HTTP.

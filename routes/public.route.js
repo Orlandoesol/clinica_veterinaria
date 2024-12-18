@@ -37,6 +37,13 @@ router.get('/paciente', (req, res) => {
     res.sendFile(path.join(__dirname, '../public/paciente.html'));
 });
 
+//ruta login
+router.get('/login', (req, res) => {
+    res.sendFile(path.join(__dirname, '../public/login.html'));
+});
+
+
+
 
 
 export default router;
