@@ -19,18 +19,17 @@
         <nav class="navbar navbar-expand-lg bg-body-tertiary justify-content-center">
             <ul class="nav nav-tabs">
                 <li class="nav-item">
-                    <img src="../img/icono.PNG" alt="" style="width: 50px;">
+                    <a class="nav-link" aria-current="page" href="/home">
+                    <img src="../img/icono.PNG" alt="" style="width: 50px" href="/home">
+                </a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="/home">Inicio</a>
-                </li>
-                <li class="nav-item">
+                <li class="nav-item pt-2">
                     <a class="nav-link" aria-current="page" href="/clientes">Cliente</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item pt-2">
                     <a class="nav-link" aria-current="page" href="/paciente">Paciente</a>
                 </li>
-                <li class="nav-item dropdown">
+                <li class="nav-item pt-2 dropdown">
                     <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
                         aria-expanded="false">
                         Historia Clinica</a>
@@ -40,10 +39,10 @@
                         <li><a class="dropdown-item" href="#">Medicamentos</a></li>
                     </ul>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item pt-2">
                     <a class="nav-link" href="#">Veterinario</a>
                 </li>
-                <li class="nav-item dropdown">
+                <li class="nav-item pt-2 dropdown">
                     <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
                         aria-expanded="false">
                         Factura</a>
@@ -57,7 +56,7 @@
     <div class="container mt-4">
         <h1 class="blockquote">Gestion de Clientes</h1>
         <!-- Formulario para pedir los datos -->
-        <form class="container mt-4" id="formCliente" method="post" >
+        <form class="container mt-4" id="formCliente">
             <div class="row">
                 <div class="col-12 col-md-4 mb-1">
                     <div class="form-group">
@@ -94,7 +93,7 @@
                     <div class="form-group">
                         <label for="telefono_2">Telefono 2</label>
                         <input type="tel" class="form-control w-100" name="telefono_2" id="telefono_2" required>
-                    </div>
+                    </div> 
                 </div>
                 <div class="col-12 col-md-4 mb-1">
                     <div class="form-group">
@@ -106,9 +105,12 @@
             <div class="btn-group mt-3">
                 <button type="submit" class="btn btn-primary mx-2 rounded w-100">Enviar</button>
                 <button type="reset" class="btn btn-outline-primary mx-2 rounded w-100">Borrar</button>
+                <button type="button" class="btn btn-outline-info mx-2 rounded w-100" onclick="loadClientes()">Clientes</button>
+                <input class="form-control mx-2 rounded" type="search" id="searchInput" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success rounded" type="button" onclick="searchCliente()">Search</button>
             </div>           
         </form>
-      <table class="table table-bordered table-striped table-hover mt-4">
+        <table class="table table-bordered table-striped table-hover mt-4">
             <thead class="table-dark">
                 <tr>
                     <th scope="col">Id</th>
@@ -121,16 +123,17 @@
                     <th scope="col">Acciones</th>
                 </tr>
             </thead>
-            <tbody id="clientes">
+            <tbody id="clientesTbBd">
             </tbody>
         </table>
     </div>
 
 
-    <script src="../script.js"></script>
-    <script src="../index.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <!-- <script type="module" src="conexion.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="../clientes.js"></script>
+    
+
 </body>
 
 </html>

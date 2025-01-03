@@ -3,7 +3,7 @@ import { db } from '../database/conexion_db.js';
 const createUser = async ({email, password, role}) => {
     const query = {
         text: `
-        INSERT INTO admin.users (email, password, role) 
+        INSERT INTO admin.users (email, password, role)
         VALUES ($1, $2, $3) 
         RETURNING email, password, role
         `,
@@ -14,9 +14,13 @@ const createUser = async ({email, password, role}) => {
     return rows[0];
 }
 
-const showUser = async (req, res) => {
-    const result = await db.query('SELECT * FROM admin.users');
-    res.json(result.rows);
+const showUser = async () => {
+    const result = {
+        text:`
+        SELECT * FROM admin.users`
+    };
+    const { rows } = await db.query(result);
+    return rows
 }
 
 const findOneByEmail = async (email) => {
@@ -30,6 +34,7 @@ const findOneByEmail = async (email) => {
     const {rows} = await db.query(query, [email]);
     return rows[0];
 }
+
 
 export const UserModel = {
     createUser,

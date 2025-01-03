@@ -18,18 +18,22 @@ const app = express(); // Crear una instancia de express
     res.send('Hello World!') // respuesta del servidor
 }); */
 
+// Redirigir la ruta raíz a la página de login
+app.get('/', (req, res) => {
+    res.redirect('/login');
+});
+
 //Middleware de aplicación app.use()
 app.use(express.json());//parsear el body de la petición a json
 app.use(express.urlencoded({ extended: true}));//formdata para tramites con formularios
+// Configurar el encabezado Content-Type para UTF-8
+
 //app.use(express.static('public'));
 app.use(express.static(path.join(__dirname, 'public')));
-/* app.use(express.static('img')); */
+
 
 
 app.use('/', publicRouter);//
-
-//app.use('/', cliente.route );
-
 app.use('/api/v1/clientes', clienteRouter);//vista cliente
 app.use('/api/v1/users', usersRouter);//vista Usuario
 

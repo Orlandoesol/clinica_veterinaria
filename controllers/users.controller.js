@@ -1,20 +1,21 @@
 import bcryptjs from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { UserModel } from "../models/user.model.js";
+import { UserModel } from '../models/user.model.js';
 
 // ruta /api/v1/users/regUser
 const regUser = async (req, res) => {
     try {
-        console.log(req.body);//
-        const { email, password ,role } = req.body;
+        const { email, password , role } = req.body;
         if (!email || !password || !role) {
-            return res.status(400).json({ ok: false,
-                                message: "Faltan campos!" });
+            return res.status(400).json({ 
+                                ok: false,
+                                message: 'Faltan campos!' });
         }
         const user = await UserModel.findOneByEmail(email);
         if (user) {
-            return res.status(400).json({ ok: true,
-                                        message: "El usuario ya existe" });
+            return res.status(400).json({ 
+                                    ok: true,
+                                    message: 'El usuario ya existe' });
         }
 
         const salt = await bcryptjs.genSalt(10);
@@ -28,14 +29,19 @@ const regUser = async (req, res) => {
             }
         );
 
-        return res.status(201).json({ ok: true,
-            message: newUser})
+        return res.status(201).json({ 
+                                ok: true,
+                                message: {
+                                token, role: newUser.role
+                                }
+                            });
         } catch (error) {
             console.log(error)
             return res.status(500).json({ 
                 ok: false,
-                message: "Error al crear usuario" });
-            }
+                message: 'Error server' 
+            });
+        }
 }
 
 
@@ -45,20 +51,22 @@ const logUser = async (req, res) => {
         const { email, password } = req.body;
 
         if (!email || !password) {
-            return res.status(400).json({ error: "Campos requeridos!!"});
+            return res.status(400).json({ 
+                error: 'Missing required fields!!'});
         }
 
         const user = await UserModel.findOneByEmail(email)
         if(!user) {
-            return res.status(400).json({ error: "Usuario no existe!!" });
+            return res.status(400).json({ 
+                error: 'User not found!!' });
         }
 
         const isMatch = await bcryptjs.compare(password, user.password);
         if(!isMatch) {
-            return res.status(400).json({ error: "Contraseña incorrecta!!" });
+            return res.status(400).json({ error: 'Invalid credentials!!' });
         }
 
-        const token = jwt.sign({ email: newUser.email, role: newUser.role },
+        const token = jwt.sign({ email: user.email, role: user.role },
             process.env.JWT_SECRET,
             {
                 expiresIn: '1h',
@@ -67,19 +75,55 @@ const logUser = async (req, res) => {
 
         return res.json({ ok: true,
                             message: {
-                                token, role: user.role
+                                token, 
+                                role: user.role
                             }
-                            })
+                        });
 
-    }catch{
+    }catch (error){
         console.log(error)
         return res.status(500).json({ 
             ok: false,
-            message: "Error al crear usuario" });
+            message: 'Error server' });
     }
+}
+
+const profile = async (req, res) => {
+    try {
+        const user = await UserModel.findOneByEmail(req.email)
+        return res.json({
+                ok: true,
+                message: user
+        });
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({ 
+                                ok: false,
+                                message: 'Error server' 
+        });
+    }
+}
+
+const findAll = async (req, res) => {
+    try {
+        const users = await UserModel.showUser()
+        return res.json({ok: true,
+                    message: users
+        });
+
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({ 
+                                ok: false,
+                                message: 'Error server' 
+        });
+    }
+
 }
 
 export const UserController = {
     regUser,
-    logUser
+    logUser,
+    findAll,
+    profile
 }

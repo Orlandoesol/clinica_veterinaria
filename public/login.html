@@ -6,52 +6,68 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="/img/icono.PNG" type="image/x-icon">
+    <link rel="shortcut icon" href="../public/img/icono.PNG" type="image/x-icon">
     <title>Clinica Veterinaria</title>
 </head>
-<body class="bg-light">
+<body class="bg-light p-5">
 
     <!-- Contenedor ppal -->
     <div class="container d-flex justify-content-center aligne-items-center vh-100">
         <div class="row w-100">
             <div class="col-md-6 mx-auto">
                 <!-- Tarjeta de formulario -->
-                 <div class="card shadow-lg">
+                <div class="card shadow-lg">
                     <div class="card-body p-4">
                         <h2 class="text-center mb-4">Iniciar Sesión</h2>
-
                         <!-- Formulario -->
-                         <form action="#" method="post">
+                        <form id="loginForm">
                             <div class="mb-3">
                                 <label for="email" class="form-label">Correo Electronico</label>
-                                <input type="text" class="form-control" id="email" name="email" placeholder="Ingrese su correo electronico" required>
+                                <input type="text" class="form-control" name="email" placeholder="Ingrese su correo electronico" required>
                             </div>
                             <div class="mb-3">
                                 <label for="password" class="form-label">Contraseña</label>
-                                <input type="password" class="form-control" name="password" id="password" placeholder="Ingrese su contraseña" required>
+                                <input type="password" class="form-control" name="password" placeholder="Ingrese su contraseña" required>
                             </div>
                             <div class="d-grid gap-2">
                                 <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
-
                             </div>
-
-                         </form>
-
-
+                        </form>
                     </div>
-
-                 </div>
-
+                </div>
             </div>
-
         </div>
-
     </div>
     
 
 
 
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
+<!--     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        const loginForm = document.querySelector('#loginForm')
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault()
+            const email = e.target.email.value
+            const password = e.target.password.value
+            try {
+                const { data } = await axios.post('/api/v1/users/logUser', {
+                    email, password
+                })
+                localStorage.setItem('token', data.message.token)
+
+                if (data.message.role === 'Superadmin') {
+                    window.location.href = '/home'
+                    return
+                }
+
+                window.location.href = '/home'
+            } catch (error) {
+                console.error('Error during login:', error);
+                alert('Login failed. Please check your credentials and try again.');
+            }
+        });
+    </script>
 </body>
 </html>
