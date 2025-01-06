@@ -8,7 +8,10 @@ const connectionString = process.env.DATABASE_URL; // Obtener la conexión a la 
 // Instancia nueva de Pool
 export const db = new Pool({
     allowExitOnIdle: true,// se deja en true para que el pool se cierre cuando no se esté utilizando
-    connectionString // Conexión a la base de datos
+    connectionString, // Conexión a la base de datos
+    ssl: {
+        rejectUnauthorized: false
+      }
 });
 
 //Probar conexion
