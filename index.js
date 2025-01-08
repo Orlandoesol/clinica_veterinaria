@@ -31,8 +31,6 @@ app.use(express.urlencoded({ extended: true}));//formdata para tramites con form
 //app.use(express.static('public'));
 app.use(express.static(path.join(__dirname, 'public')));
 
-
-
 app.use('/', publicRouter);//
 app.use('/api/v1/clientes', clienteRouter);//vista cliente
 app.use('/api/v1/users', usersRouter);//vista Usuario

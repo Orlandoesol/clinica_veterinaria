@@ -1,5 +1,5 @@
 import { db } from '../database/conexion_db.js';
-
+//CREATE
 const createUser = async ({email, password, role}) => {
     const query = {
         text: `
@@ -13,7 +13,7 @@ const createUser = async ({email, password, role}) => {
     const { rows } = await db.query(query);
     return rows[0];
 }
-
+//READ
 const showUser = async () => {
     const result = {
         text:`
@@ -26,7 +26,7 @@ const showUser = async () => {
 const findOneByEmail = async (email) => {
     const query = {
         text:`
-        SELECT * FROM admin.users 
+        SELECT * FROM admin.users
         WHERE email = $1
         `,
         values: [email]

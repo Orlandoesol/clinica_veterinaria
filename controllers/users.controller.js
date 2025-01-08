@@ -17,7 +17,7 @@ const regUser = async (req, res) => {
                                     ok: true,
                                     message: 'El usuario ya existe' });
         }
-
+        //Password encryption
         const salt = await bcryptjs.genSalt(10);
         const hashedPassword = await bcryptjs.hash(password, salt);
         const newUser = await UserModel.createUser({ email, password: hashedPassword, role });
@@ -32,7 +32,8 @@ const regUser = async (req, res) => {
         return res.status(201).json({ 
                                 ok: true,
                                 message: {
-                                token, role: newUser.role
+                                token, 
+                                role: newUser.role
                                 }
                             });
         } catch (error) {
@@ -43,8 +44,6 @@ const regUser = async (req, res) => {
             });
         }
 }
-
-
 // ruta /api/v1/users/logUser
 const logUser = async (req, res) => {
     try {
@@ -75,7 +74,8 @@ const logUser = async (req, res) => {
 
         return res.json({ ok: true,
                             message: {
-                                token, 
+                                token,
+                                email: user.email,
                                 role: user.role
                             }
                         });
@@ -118,7 +118,6 @@ const findAll = async (req, res) => {
                                 message: 'Error server' 
         });
     }
-
 }
 
 export const UserController = {

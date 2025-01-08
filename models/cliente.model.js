@@ -62,7 +62,6 @@ const findOneByEmail = async (email) => {
     const {rows} = await db.query(query, [email]);
     return rows[0];
 }
-
 //Buscar por ID
 const findById_cliente = async (id_cliente) => {
     const query = {
@@ -134,6 +133,5 @@ export const ClientModel = {
     deleteCliente,
     findOneByEmail,
     findById_cliente,
-    findIdOrEmail,
-    
+    findIdOrEmail
 }
