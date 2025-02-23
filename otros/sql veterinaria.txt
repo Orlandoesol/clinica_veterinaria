@@ -1,0 +1,436 @@
+CREATE DATABASE db_clinica_veterinaria;
+
+-- Crear tabla CLIENTES
+CREATE TABLE clientes (
+    id_cliente BIGINT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    primer_apellido VARCHAR(100) NOT NULL,
+    segundo_apellido VARCHAR(100) NOT NULL,
+    telefono_1 VARCHAR(15) NOT NULL,
+    telefono_2 VARCHAR(15),
+    email VARCHAR(100) UNIQUE NOT NULL
+);
+
+-- Insertar datos en CLIENTES
+INSERT INTO clientes (id_cliente, nombre, primer_apellido, segundo_apellido, telefono_1, telefono_2, email)
+VALUES
+(1076017781, 'Juan', 'Pérez', 'Ortiz', '123456789', '987654321', 'juan@email.com'),
+(499641788, 'Ana', 'Gómez', 'Viafara', '987654321', NULL, 'ana@email.com'),
+(843466820, 'Luis', 'Martínez', 'Arango', '456123789', NULL, 'luis@email.com');
+
+
+-- Crear tabla PACIENTE
+CREATE TABLE paciente (
+    id_Paciente SERIAL PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    sexo VARCHAR(10) NOT NULL,
+    edad INT NOT NULL,
+    peso DECIMAL(5, 2),
+    id_Paciente_cliente BIGINT REFERENCES clientes(id_Cliente)
+);
+
+-- Insertar datos en PACIENTE
+INSERT INTO paciente (nombre, sexo, edad, peso, id_paciente_cliente)
+VALUES
+('Max', 'macho', 5.2, 25, 1076017781),
+('Luky', 'macho', 2.3, 2, 1076017781),
+('Bella', 'hembra', 3, 4.7, 499641788),
+('Rocky', 'macho', 4, 20, 843466820);
+
+-- Crear tabla ESPECIE
+CREATE TABLE especie (
+    id_especie SERIAL PRIMARY KEY,
+    raza VARCHAR(100) NOT NULL,
+    especie VARCHAR(100) NOT NULL,
+    id_especie_paciente INT REFERENCES paciente(id_Paciente)
+);
+
+-- Insertar datos en ESPECIE
+INSERT INTO especie (raza, especie, id_especie_paciente)
+VALUES
+('Labrador', 'Perro',1),
+('Pincher', 'Perro',2),
+('Persa', 'Gato',3),
+('Bulldog', 'Perro',4);
+
+-- Crear tabla veterinarios
+CREATE TABLE veterinarios (
+    id_veterinario BIGINT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    apellido VARCHAR(100) NOT NULL,
+    telefono VARCHAR(15) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    especialidad VARCHAR(100) NOT NULL,
+    tp VARCHAR(20)
+);
+
+-- Insertar datos en veterinarios
+INSERT INTO veterinarios (id_veterinario, nombre, apellido, telefono, email, especialidad, tp)
+VALUES
+(498938231, 'Carlos', 'Cardenas', '321654987', 'carlos@email.com', 'Cirugía', 'QND-123'),
+(370748571, 'Maria', 'Davila', '654789123', 'maria@email.com', 'Medicina Interna', 'VDC-687'),
+(771045946, 'Javier', 'Congote', '987321654', 'javier@email.com', 'Dermatología', 'TLM-493');
+
+-- Crear tabla CARGOS
+CREATE TABLE cargos (
+    id_cargos SERIAL PRIMARY KEY,
+    cargo VARCHAR(100) NOT NULL,
+    id_vete_cargo BIGINT REFERENCES veterinarioS(id_veterinario)
+);
+
+-- Insertar datos en CARGOS
+INSERT INTO cargos (cargo, id_vete_cargo)
+VALUES
+('Medico Cirujano', 498938231),
+('Medico General', 370748571),
+('Dermatologo', 771045946);
+
+-- Crear tabla HISTORIA CLINICA
+CREATE TABLE historia_clinica (
+    id_hc SERIAL PRIMARY KEY,
+    fecha_atencion DATE NOT NULL,
+    fecha_salida DATE NOT NULL,
+    motivo_consulta VARCHAR(255) NOT NULL,
+    id_hc_veterinario BIGINT REFERENCES veterinarioS(id_veterinario),
+    id_hc_especie INT REFERENCES especie(id_especie),
+    id_hc_proc INT REFERENCES procedimientos(id_proced),
+    id_hc_diag INT REFERENCES diagnostico(id_diag)
+);
+
+-- Insertar datos en HISTORIA CLINICA
+INSERT INTO historia_clinica (fecha_atencion, fecha_salida, motivo_consulta, id_hc_veterinario, id_hc_especie, id_hc_proc, id_hc_diag, id_hc_medicamento)
+VALUES
+('2024-01-15', '2024-01-18', 'Malestar auditivo', 370748571, 3, 951, 12, 1736),
+('2024-01-15', '2024-01-18', 'Malestar auditivo', 771045946, 4, 624, 12, 1736),
+('2024-02-20', '2024-02-23', 'Bolas en el cuerpo', 771045946, 1, 587, 32, 1054),
+('2024-04-12', '2024-04-15', 'Sangre en la nariz', 370748571, 3, 563, 56, 3589),
+('2024-04-12', '2024-04-15', 'Decaimiento', 370748571, 3, 3654, 56, 7712),
+('2024-03-10', '2024-03-13', 'Control', 498938231, 2, 3654, 59, 7712);
+
+-- Crear tabla PROCEDIMIENTOS
+CREATE TABLE procedimientos (
+    id_proced INT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    descripcion TEXT NOT NULL
+);
+
+-- Insertar datos en PROCEDIMIENTOS
+INSERT INTO procedimientos (id_proced, nombre, descripcion)
+VALUES
+(951, 'Limpieza de oídos', 'k godhpiu'),
+(624, 'Antibioticos', 'iusa gpih ;'),
+(587, 'RX', 'liugauf lukshl'),
+(563, 'Desparasitante', 'gl ailgs liufg'),
+(3654, 'Exámenes de sangre', 'I gauwlkuyeryh');
+
+-- Crear tabla DIAGNÓSTICO
+CREATE TABLE diagnostico (
+    id_diag INT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    descripcion TEXT NOT NULL
+);
+
+-- Insertar datos en DIAGNOSTICO
+INSERT INTO diagnostico (id_diag, nombre, descripcion)
+VALUES
+(12, 'Otitis', 'k godhpiu'),
+(32, 'Masas', 'iusa gpih ;'),
+(56, 'Parasitos', 'liugauf lukshl'),
+(59, 'No definido', 'gl ailgs liufg');
+
+-- Crear tabla MEDICAMENTOS
+CREATE TABLE medicamentos (
+    id_medicamento INT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    tipo VARCHAR(50) NOT NULL,
+    cantidad INT NOT NULL,
+    fecha_vencimiento DATE NOT NULL
+);
+
+-- Insertar datos en MEDICAMENTOS
+INSERT INTO medicamentos (id_medicamento, nombre, tipo, cantidad, fecha_vencimiento)
+VALUES
+(1736, 'Antibiótico', 'Pastilla', 30, '2025-05-01'),
+(7712, 'Analgésico', 'Inyecccion', 10, '2024-12-15'),
+(1054, 'Antiinflamatorio', 'Pastilla', 20, '2025-03-10');
+
+-- Crear tabla factura
+CREATE TABLE factura (
+     id_factura INT PRIMARY KEY,
+     valor DECIMAL(10, 2) NOT NULL,
+     fecha_emision DATE NOT NULL,
+     descripcion TEXT NOT NULL,
+     cantidad INT NOT NULL,
+     id_factura_cliente BIGINT REFERENCES clientes(id_cliente),
+     id_factura_hc INT REFERENCES historia_clinica(id_hc),
+     id_factura_pago INT REFERENCES tipo_pago(id_pago)
+);
+
+-- Insertar datos en factura
+INSERT INTO factura (id_factura, valor, fecha_emision, descripcion, cantidad, id_factura_cliente, id_factura_hc, id_factura_pago)
+VALUES
+(4565, 150000, '2024-01-16', 'Consulta y medicación', 1, 499641788, 7, 1740),
+(4432, 200000, '2024-02-21', 'Consulta y exámenes', 1, 499641788, 12, 7716),
+(4791, 400000, '2024-05-08', 'RX', 1, 1076017781, 9, 1058),
+(4065, 100000, '2024-03-11', 'Consulta', 1, 499641788, 10, 7716);
+
+--Crear tabla tipo de pago
+CREATE TABLE tipo_pago (
+id_pago INT PRIMARY KEY,
+codigo VARCHAR(5) NOT NULL,
+tipo VARCHAR(15) NOT NULL,
+medio VARCHAR(15) NOT NULL,
+num_cuenta BIGINT,
+vencimiento VARCHAR(10)
+);
+
+--Insertar datos en tipo de pago
+INSERT INTO tipo_pago (id_pago, codigo, tipo, medio, num_cuenta, vencimiento)
+VALUES
+(1740, 'C_1', 'Contado', 'Efectivo', NULL, NULL),
+(7716, 'TC_2', 'Tarjeta Credito', 'Electronico', 2345-6789-0123-4567, 10/26),
+(1058, 'T_3', 'Transferencia', 'Electronico', 1234567890, NULL),
+(1059, 'C_1', 'Contado', 'Efectivo', NULL, NULL);
+
+
+-- Modificar la tabla historia_clinica para agregar la relación con medicamentos
+ALTER TABLE historia_clinica
+ADD COLUMN id_medicamento INT REFERENCES medicamentos(id_medicamento);
+
+
+--------------------------------
+
+consultas:
+
+Ver los pacientes de un cliente en especifico.
+
+SELECT p.id_paciente, p.nombre, p.sexo, p.edad, p.peso
+FROM paciente p
+JOIN clientes c ON p.id_paciente_cliente = c.id_cliente
+WHERE c.id_cliente = 1076017781;
+
+--Consultar los clientes que tienen más de un teléfono registrado.
+SELECT nombre, primer_apellido, segundo_apellido, telefono_1, telefono_2, email
+FROM clientes
+WHERE telefono_2 IS NOT NULL;
+
+--Consultar los pacientes con edad superior a 3 años.
+SELECT nombre, sexo, edad, peso
+FROM paciente
+WHERE edad > 3;
+
+--Consultar los veterinarios cuya especialidad sea "Medicina Interna".
+SELECT nombre, apellido, especialidad
+FROM veterinarios
+WHERE especialidad = 'Medicina Interna';
+
+
+
+Agrupamiento con GROUP BY
+
+--Contar cuántos pacientes están registrados por especie:
+SELECT e.especie, COUNT(p.id_Paciente) AS total_pacientes
+FROM especie e
+JOIN paciente p ON e.id_especie_paciente = p.id_Paciente
+GROUP BY e.especie;
+
+--Consultar el número de pacientes por especie.
+SELECT e.especie, COUNT(*) AS numero_pacientes
+FROM paciente p
+JOIN especie e ON p.id_Paciente = e.id_especie_paciente
+GROUP BY e.especie;
+
+--Consultar la suma total de facturación por cliente.
+SELECT c.nombre, c.primer_apellido, SUM(f.valor) AS total_facturado
+FROM factura f
+JOIN clientes c ON f.id_factura_cliente = c.id_cliente
+GROUP BY c.id_cliente;
+
+--Consultar la cantidad de medicamentos en stock por tipo (Pastilla, Inyección, etc.)
+SELECT tipo, SUM(cantidad) AS total_stock
+FROM medicamentos
+GROUP BY tipo;
+
+---
+
+Ordenamiento con ORDER BY
+
+--Ver las fechas de atención de un veterinario específico (por ejemplo, con id_veterinario = 498938231):
+SELECT hc.fecha_atencion, hc.motivo_consulta, p.nombre AS paciente
+FROM historia_clinica hc
+JOIN paciente p ON hc.id_hc_especie = p.id_Paciente
+WHERE hc.id_hc_veterinario = 498938231
+ORDER BY hc.fecha_atencion DESC;
+
+--Consultar los pacientes ordenados por edad (de mayor a menor).
+SELECT nombre, sexo, edad, peso
+FROM paciente
+ORDER BY edad DESC;
+
+--Consultar las facturas ordenadas por fecha de emisión más reciente
+SELECT id_factura, valor, fecha_emision, descripcion, cantidad
+FROM factura
+ORDER BY fecha_emision DESC;
+
+JOIN
+
+ INNER JOIN
+
+--Ver los pacientes con su especie (raza y especie)
+SELECT p.nombre AS paciente, e.raza, e.especie
+FROM paciente p
+JOIN especie e ON p.id_paciente = e.id_especie_paciente;
+
+
+--Consultar las historias clínicas de un paciente específico (por ejemplo, 'Max').
+SELECT h.fecha_atencion, h.fecha_salida, h.motivo_consulta, v.nombre AS veterinario, e.raza AS especie
+FROM historia_clinica h
+JOIN veterinarios v ON h.id_hc_veterinario = v.id_veterinario
+JOIN especie e ON h.id_hc_especie = e.id_especie
+JOIN paciente p ON e.id_especie_paciente = p.id_Paciente
+WHERE p.nombre = 'Max';
+
+
+--Reporte clinico de un paciente
+SELECT hc.fecha_atencion, hc.fecha_salida, hc.motivo_consulta, v.nombre AS veterinario, e.raza, e.especie, p.nombre AS procedimiento, d.nombre AS diagnostico 
+FROM historia_clinica hc
+JOIN veterinarios v ON hc.id_hc_veterinario = v.id_veterinario
+JOIN especie e ON hc.id_hc_especie = e.id_especie
+JOIN procedimientos p ON hc.id_hc_proc = p.id_proced
+JOIN diagnostico d ON hc.id_hc_diag = d.id_diag
+WHERE e.id_especie_paciente = 1;
+
+--Obtener las facturas junto con los datos de los clientes y veterinarios asociados.
+SELECT f.id_factura, f.valor, f.fecha_emision, c.nombre AS cliente_nombre, v.nombre AS veterinario_nombre
+FROM factura f
+JOIN clientes c ON f.id_factura_cliente = c.id_cliente
+JOIN historia_clinica hc ON f.id_factura_hc = hc.id_hc
+JOIN veterinarios v ON hc.id_hc_veterinario = v.id_veterinario;
+
+--Ver las especies que tienen un determinado diagnóstico (por ejemplo, "Otitis"):
+SELECT e.especie, e.raza
+FROM historia_clinica hc
+JOIN diagnostico d ON hc.id_hc_diag = d.id_diag
+JOIN especie e ON hc.id_hc_especie = e.id_especie
+WHERE d.nombre = 'Otitis';
+
+--Ver la lista de pacientes y sus veterinarios:
+
+SELECT p.nombre AS paciente, v.nombre AS veterinario, v.apellido
+FROM historia_clinica hc
+JOIN paciente p ON hc.id_hc_especie = p.id_Paciente
+JOIN veterinarios v ON hc.id_hc_veterinario = v.id_veterinario;
+
+--LEFT JOIN: Obtener todos los clientes y sus facturas (incluso aquellos que no tienen facturas).
+
+SELECT c.nombre, c.primer_apellido, f.id_factura, f.valor
+FROM clientes c
+LEFT JOIN factura f ON c.id_cliente = f.id_factura_cliente;
+
+--RIGHT JOIN: Obtener todos los veterinarios y las historias clínicas relacionadas con ellos (incluso si no tienen historias clínicas).
+SELECT v.nombre, v.apellido, hc.fecha_atencion, hc.motivo_consulta
+FROM veterinarios v
+RIGHT JOIN historia_clinica hc ON v.id_veterinario = hc.id_hc_veterinario;
+
+--FULL OUTER JOIN: Obtener todos los clientes y todas las facturas, incluyendo aquellos que no tienen relaciones (clientes sin facturas y facturas sin clientes).
+SELECT c.nombre, c.primer_apellido, f.id_factura, f.valor
+FROM clientes c
+FULL OUTER JOIN factura f ON c.id_cliente = f.id_factura_cliente;
+
+
+--Total pacientes por ciente
+SELECT c.nombre || ' ' || c.primer_apellido || ' ' || c.segundo_apellido AS cliente, 
+       COUNT(p.id_Paciente) AS total_pacientes
+FROM clientes c
+LEFT JOIN paciente p ON c.id_cliente = p.id_Paciente_cliente
+GROUP BY c.id_cliente;
+
+//c.nombre || ' ' || c.primer_apellido || ' ' || c.segundo_apellido AS cliente:
+
+Aquí se está concatenando el nombre, primer apellido y segundo apellido de cada cliente con un espacio entre ellos. 
+La concatenación se hace utilizando el operador || en PostgreSQL (que es el operador para concatenar cadenas).
+El resultado de esta concatenación se denomina como cliente (se usa el alias cliente para darle un nombre más claro a la columna resultante).
+Ejemplo: Si tienes un cliente con el nombre "Juan", primer apellido "Pérez" y segundo apellido "Ortiz", el resultado de esta concatenación sería:
+
+
+Subconsulta 
+
+--Ver todos los pacientes y sus diagnósticos más recientes:
+SELECT p.nombre AS paciente, d.nombre AS diagnostico, hc.fecha_atencion
+FROM historia_clinica hc
+JOIN paciente p ON p.id_Paciente = hc.id_hc_especie
+JOIN diagnostico d ON d.id_diag = hc.id_hc_diag
+WHERE hc.fecha_atencion = (
+    SELECT MAX(fecha_atencion)
+    FROM historia_clinica
+    WHERE id_hc_especie = hc.id_hc_especie
+);
+
+--para obtener la factura más alta por cliente.
+SELECT c.nombre, c.primer_apellido, f.valor
+FROM clientes c
+JOIN factura f ON c.id_cliente = f.id_factura_cliente
+WHERE f.valor = (
+    SELECT MAX(valor)
+    FROM factura
+    WHERE id_factura_cliente = c.id_cliente
+);
+
+. Vistas
+--6.1 Crear una vista que muestre el total facturado por cliente, incluyendo nombre y apellido.
+CREATE VIEW vista_facturacion_cliente AS
+SELECT c.nombre, c.primer_apellido, SUM(f.valor) AS total_facturado
+FROM factura f
+JOIN clientes c ON f.id_factura_cliente = c.id_cliente
+GROUP BY c.id_cliente;
+
+--Consultar la vista creada anteriormente para ver el total facturado por cada cliente.
+SELECT * FROM vista_facturacion_cliente;
+
+7. Consultas con Agregados y Funciones
+7.1 Consultar el promedio de edad de los pacientes.
+sql
+Copiar código
+SELECT AVG(edad) AS promedio_edad
+FROM paciente;
+7.2 Consultar la cantidad total de medicamentos de cada tipo.
+sql
+Copiar código
+SELECT tipo, SUM(cantidad) AS total_disponible
+FROM medicamentos
+GROUP BY tipo;
+7.3 Consultar la factura más alta de todos los clientes.
+sql
+Copiar código
+SELECT id_factura, valor, fecha_emision
+FROM factura
+ORDER BY valor DESC
+LIMIT 1;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
