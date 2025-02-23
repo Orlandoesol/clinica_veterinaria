@@ -1,0 +1,23 @@
+1.DDL (Data Definition Language)
+*Definir y modificar la estructura de la base de datos, (CRUD).
+Create, Read, Update, Deleted.
+-CREATE, crea objetos (la db, las tablas, registros, etc.)
+-ALTER, modificar los objetos
+-DROP, Elimina un objeto
+-TRUNCATE, Elimina todos.
+-----------------------------------------
+2.DML (Data Manipulation Language)
+-SELECT, recuperar, llamar o seleccionar datos de mi tabla
+-INSERT, Insertar datos o registros en tabla.
+-UPDATE, Modifica los regsitros o datos de tabla.
+-DELETE, Elimina registros de una tabla
+-----------------------------------------
+3.DCL (Data Control Language), acceso o permisos
+-GRANT, concede permisos de usuairo
+-REVOKE, Revoca los permisos
+-----------------------------------------
+4.TCL (Transaction Control Languaje)
+-COMMIT, Guarda cambios de manera permanente
+-ROLLBACK, Deshacer los cambios.
+-SAVEPOINT, Establece puntos intermedios en las transacciones.
+-SET TRASACTION, Establecer una transaccion, modo de aisalmiento.

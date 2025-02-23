@@ -1,0 +1,88 @@
+Microsoft Windows [Versión 10.0.19045.5131]
+(c) Microsoft Corporation. Todos los derechos reservados.
+
+cmd visual
+
+**********
+*npm init*
+**********
+
+This utility will walk you through creating a package.json file.
+It only covers the most common items, and tries to guess sensible defaults.
+
+See `npm help init` for definitive documentation on these fields
+and exactly what they do.
+
+Use `npm install <pkg>` afterwards to install a package and
+save it as a dependency in the package.json file.
+
+Press ^C at any time to quit.
+package name: (db_clinica_veterinaria)
+version: (1.0.0)
+description:
+entry point: (conexion.js)
+test command:
+git repository:
+keywords:
+author: Orlando
+license: (ISC)
+About to write to C:\Users\Orlando\Desktop\db_clinica_veterinaria\package.json:
+
+{
+  "name": "db_clinica_veterinaria",
+  "version": "1.0.0",
+  "main": "conexion.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Orlando",
+  "license": "ISC",
+  "description": ""
+
+C:\Users\Orlando\Desktop\db_clinica_veterinaria>
+
+**********
+*npm init*
+**********
+
+This utility will walk you through creating a package.json file.
+It only covers the most common items, and tries to guess sensible defaults.
+
+See `npm help init` for definitive documentation on these fields
+and exactly what they do.
+
+Use `npm install <pkg>` afterwards to install a package and
+save it as a dependency in the package.json file.
+
+Press ^C at any time to quit.
+package name: (db_clinica_veterinaria)
+version: (1.0.0)
+description:
+entry point: (conexion.js)
+test command: node conexion.js
+git repository:
+keywords:
+author: Orlando
+license: (ISC)
+About to write to C:\Users\Orlando\Desktop\db_clinica_veterinaria\package.json:
+
+
+****************
+*npm install pg*
+****************
+
+**********
+*npm test*
+**********
+
+
+--Inserta datos
+INSERT INTO clientes (id_cliente, nombre, primer_apellido, segundo_apellido, telefono_1, telefono_2, email)
+VALUES
+(1095689566, 'Margarita', 'Marin', 'Ocampo', '32156897456', '311563365896', 'margarita@email.com'),
+
+------
+crear interfaz
+npm init -y
+npm install express mongoose body-parser cors
+--------------------------

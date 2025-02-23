@@ -1,0 +1,92 @@
+Para normalizar la base de datos , aplicaremos las formas normales (FN) y describimeros los problemas potenciales y sus correcciones en cada etapa.
+
+1. Primera Forma Normal (1FN)
+Requisitos:
+
+Todos los atributos deben contener valores atómicos.
+No debe haber duplicados.
+Problemas:
+
+La tabla CLIENTES tiene entradas duplicadas para un mismo cliente con diferentes animales, lo que genera redundancia en los datos del cliente.
+Corrección:
+
+Crear una tabla separada para los PACIENTES (animales) donde cada paciente tenga su propia entrada y una clave foránea que lo relacione con el cliente. Por ejemplo:
+PACIENTES
+
+ID_Paciente	Nombre	Edad	Peso	Cliente_ID (FK)
+1	Max	5	25	1076017781
+2	Luky	2	2	1076017781
+3	Bella	3	4	499641788
+4	Rocky	4	20	843466820
+2. Segunda Forma Normal (2FN)
+Requisitos:
+
+Debe estar en 1FN.
+Todos los atributos no clave deben depender completamente de la clave primaria.
+Problemas:
+
+En la tabla ESPECIE, los atributos como "Raza" y "Especie" dependen de un solo atributo (ID_Especie), pero el nombre del cliente está repetido.
+Corrección:
+
+Separar la información de cliente y especie en tablas distintas. Esto ya se abordó en la corrección de 1FN. Ahora, asegurarse de que ESPECIE solo contenga información relevante a la especie.
+3. Tercera Forma Normal (3FN)
+Requisitos:
+
+Debe estar en 2FN.
+No debe haber dependencias transitivas.
+Problemas:
+
+En la tabla VETERINARIOS, los campos "Cargo" y "Especialidad" podrían ser considerados dependencias transitivas si un cargo siempre implica una especialidad específica.
+Corrección:
+
+Si un veterinario tiene una especialidad única por cargo, considera crear una tabla de CARGOS que relacione cargos con especialidades.
+4. Boyce-Codd Normal Form (BCNF)
+Requisitos:
+
+Debe estar en 3FN.
+Para cada dependencia funcional, la parte izquierda debe ser una superclave.
+Problemas:
+
+En la tabla HISTORIA CLINICA, puede haber casos donde un mismo veterinario maneje diferentes diagnósticos, lo que podría causar confusiones sobre cómo se relacionan.
+Corrección:
+
+Dividir la tabla si existen dependencias que no cumplen con la regla de superclave. Tal vez se necesiten tablas adicionales para separar diagnósticos y procedimientos.
+5. Cuarta Forma Normal (4FN)
+Requisitos:
+
+Debe estar en BCNF.
+No debe haber dependencias multivaluadas no triviales.
+Problemas:
+
+En la tabla HISTORIA CLINICA, si un diagnóstico se relaciona con múltiples procedimientos, hay una dependencia multivaluada.
+Corrección:
+
+Crear una tabla de PROCEDIMIENTOS donde se registren los procedimientos asociados a cada diagnóstico de forma individual.
+6. Quinta Forma Normal (5FN)
+Requisitos:
+
+Debe estar en 4FN.
+No debe haber dependencias de unión no triviales.
+Problemas:
+
+Si los mismos procedimientos son usados en diferentes diagnósticos, esto puede llevar a redundancias.
+Corrección:
+
+Crear una tabla de DIAGNOSTICOS y otra de PROCEDIMIENTOS que relacionen qué procedimientos son aplicables a cada diagnóstico, eliminando así redundancias.
+7. Sexta Forma Normal (6FN)
+Requisitos:
+
+Aplicable a bases de datos temporales.
+Debe estar en 5FN.
+Elimina dependencias temporales no triviales.
+Problemas:
+
+Si se llevan registros temporales de tratamientos y medicamentos que cambian a lo largo del tiempo, podrían surgir dependencias temporales.
+Corrección:
+
+Crear tablas para gestionar la historia temporal de medicamentos y tratamientos, asegurando que se registre cada cambio o actualización relevante.
+
+La normalización adecuada de la base de datos presentada ayudará a reducir la redundancia, mejorar la integridad de los datos y facilitar la gestión. Al aplicar cada forma normal, se crean relaciones más claras entre las tablas y se evita la duplicación innecesaria de datos. La revisión continua y la posibilidad de ajustes a medida que evolucionan los requerimientos también son esenciales para mantener la eficacia de la base de datos.
+
+
+

@@ -1,0 +1,167 @@
+Crear Roles:
+--crear usuario y rol
+CREATE ROLE nombre_usuario WITH LOGIN PASSWORD 'contraseña';
+
+--Asignar rol
+ALTER ROLE nombre_usuario CREATEDB;
+
+--rol sea un superusuario
+ALTER ROLE nombre_usuario WITH SUPERUSER;
+
+--asignar a un usuario la propiedad o acceso a esta base de datos. Para otorgar acceso
+GRANT ALL PRIVILEGES ON DATABASE nombre_base_de_datos TO nombre_usuario;
+
+--revisar roles
+\du
+
+--ver los privilegios
+\l
+
+
+--conectar el nuevo usuario
+psql -U nuevo_usuario -d mi_base
+
+Al crear un usuario o rol con el comando CREATE ROLE, puedes incluir diferentes parámetros para definir sus privilegios, propiedades y restricciones. Aquí están algunos de los parámetros más importantes:
+
+LOGIN
+Especifica que el rol puede conectarse a la base de datos. Si no se especifica LOGIN, el rol solo puede ser utilizado como un grupo o rol de administración, pero no podrá iniciar sesión.
+
+sql
+Copiar código
+CREATE ROLE nombre_usuario WITH LOGIN;
+PASSWORD
+Asigna una contraseña al rol, necesaria si se ha especificado el parámetro LOGIN. Si no se define, el rol no podrá acceder a la base de datos sin autenticación.
+
+sql
+Copiar código
+CREATE ROLE nombre_usuario WITH LOGIN PASSWORD 'mi_contraseña';
+SUPERUSER
+Otorga permisos de superusuario, lo que le da acceso completo y sin restricciones a todas las bases de datos y objetos dentro del sistema.
+
+sql
+Copiar código
+CREATE ROLE nombre_usuario WITH LOGIN PASSWORD 'mi_contraseña' SUPERUSER;
+NOSUPERUSER
+Especifica que el rol no tendrá permisos de superusuario. Este es el valor por defecto, pero se puede especificar explícitamente.
+
+sql
+Copiar código
+CREATE ROLE nombre_usuario WITH LOGIN PASSWORD 'mi_contraseña' NOSUPERUSER;
+CREATEDB
+Permite al rol crear nuevas bases de datos. Si no se incluye, el rol no tendrá permisos para crear bases de datos.
+
+sql
+Copiar código
+CREATE ROLE nombre_usuario WITH LOGIN PASSWORD 'mi_contraseña' CREATEDB;
+NOCREATEDB
+Especifica que el rol no podrá crear bases de datos. Este es el valor por defecto, pero también se puede especificar explícitamente.
+
+sql
+Copiar código
+CREATE ROLE nombre_usuario WITH LOGIN PASSWORD 'mi_contraseña' NOCREATEDB;
+CREATEROLE
+Otorga permisos al rol para crear otros roles o usuarios.
+
+sql
+Copiar código
+CREATE ROLE nombre_usuario WITH LOGIN PASSWORD 'mi_contraseña' CREATEROLE;
+NOCREATEROLE
+Especifica que el rol no podrá crear otros roles o usuarios. Este es el valor por defecto.
+
+sql
+Copiar código
+CREATE ROLE nombre_usuario WITH LOGIN PASSWORD 'mi_contraseña' NOCREATEROLE;
+INHERIT
+Permite que el rol herede los permisos de los roles de los cuales es miembro. Este es el comportamiento por defecto, por lo que los roles secundarios obtienen automáticamente los privilegios de los roles principales.
+
+sql
+Copiar código
+CREATE ROLE nombre_usuario WITH LOGIN PASSWORD 'mi_contraseña' INHERIT;
+NOINHERIT
+Especifica que el rol no heredará los privilegios de otros roles. En este caso, el rol no obtendrá automáticamente los privilegios de otros roles a los que pertenece.
+
+sql
+Copiar código
+CREATE ROLE nombre_usuario WITH LOGIN PASSWORD 'mi_contraseña' NOINHERIT;
+CONNECTION LIMIT
+Establece un límite de conexiones simultáneas que un rol puede realizar. Si no se especifica, el límite es ilimitado.
+
+sql
+Copiar código
+CREATE ROLE nombre_usuario WITH LOGIN PASSWORD 'mi_contraseña' CONNECTION LIMIT 5;
+VALID UNTIL
+Define una fecha y hora de expiración para la cuenta de usuario. Después de esta fecha, el usuario no podrá conectarse.
+
+sql
+Copiar código
+CREATE ROLE nombre_usuario WITH LOGIN PASSWORD 'mi_contraseña' VALID UNTIL '2024-12-31 23:59:59';
+ADMIN
+Permite asignar a un rol a otro rol como administrador. Esto da a un rol permisos para gestionar otro rol. Por ejemplo, para que un usuario sea administrador de otro rol (es decir, para poder otorgarle o revocar permisos a ese rol):
+
+sql
+Copiar código
+CREATE ROLE nombre_usuario WITH LOGIN PASSWORD 'mi_contraseña' ADMIN nombre_rol_administrado;
+REPLICATION
+Permite que el rol tenga permisos para iniciar una replicación lógica o física de bases de datos, lo cual es importante para configuraciones de alta disponibilidad y recuperación ante desastres.
+
+sql
+Copiar código
+CREATE ROLE nombre_usuario WITH LOGIN PASSWORD 'mi_contraseña' REPLICATION;
+NOREPLICATION
+Especifica que el rol no tiene permisos para la replicación.
+
+sql
+Copiar código
+CREATE ROLE nombre_usuario WITH LOGIN PASSWORD 'mi_contraseña' NOREPLICATION;
+
+Ejemplo completo con varios parámetros:
+Si quieres crear un usuario con varias propiedades, por ejemplo, un usuario que pueda iniciar sesión, crear bases de datos, crear roles y sea superusuario, el comando sería:
+
+sql
+Copiar código
+CREATE ROLE nombre_usuario WITH LOGIN PASSWORD 'mi_contraseña'
+  SUPERUSER CREATEDB CREATEROLE;
+16. SET y RESET para parámetros de sesión
+Puedes establecer parámetros de configuración específicos para cada sesión de usuario. Estos parámetros afectan solo a la sesión en la que se aplica, por ejemplo, el estilo de codificación o el valor predeterminado para las transacciones:
+
+sql
+Copiar código
+CREATE ROLE nombre_usuario WITH LOGIN PASSWORD 'mi_contraseña'
+  SET search_path TO esquema1, esquema2;
+Conclusión:
+Cuando creas un rol o usuario en PostgreSQL, puedes usar estos parámetros para ajustarlo a tus necesidades específicas. Los parámetros permiten establecer reglas de acceso, control de permisos y límites para cada rol, lo que te da un control granular sobre cómo se manejan las conexiones y los privilegios en la base de datos.
+
+ Usando la opción VALID UNTIL al crear o modificar un usuario
+La opción VALID UNTIL permite establecer una fecha y hora hasta la cual una contraseña será válida. Una vez pasada esa fecha, el usuario deberá cambiar la contraseña para poder seguir accediendo.
+
+Crear un usuario con una contraseña que expire:
+sql
+Copiar código
+CREATE ROLE nombre_usuario WITH LOGIN PASSWORD 'contraseña' VALID UNTIL '2024-12-31';
+Modificar un usuario para que su contraseña expire en una fecha específica:
+sql
+Copiar código
+ALTER ROLE nombre_usuario VALID UNTIL '2024-12-31';
+2. Configurando un tiempo de caducidad de la contraseña mediante password expiration
+PostgreSQL no tiene una función directa para establecer una política global de expiración de contraseñas para todos los usuarios, pero puedes configurar la caducidad mediante una extensión adicional como pgcrypto para mejorar la seguridad de contraseñas. Sin embargo, para mantener la simplicidad, el método más común es usar VALID UNTIL en cada usuario.
+
+3. Configuración del intervalo para la expiración de contraseñas
+Si deseas establecer que la contraseña de un usuario deba cambiar después de un tiempo específico, por ejemplo cada 90 días, deberías hacerlo manualmente o usando un script para que se actualice automáticamente cada cierto tiempo.
+
+Script para cambiar la fecha de expiración automáticamente cada 90 días:
+Este script puede ejecutarse periódicamente para actualizar la fecha de expiración de la contraseña de cada usuario.
+
+sql
+Copiar código
+DO $$ 
+DECLARE
+    r RECORD;
+BEGIN
+    FOR r IN SELECT rolname FROM pg_roles WHERE rolcanlogin = true LOOP
+        EXECUTE format('ALTER ROLE %I VALID UNTIL now() + interval ''90 days''', r.rolname);
+    END LOOP;
+END $$;
+Este script recorre todos los usuarios que tienen habilitado el inicio de sesión y actualiza la fecha de expiración de sus contraseñas, añadiendo 90 días desde la fecha actual.
+
+4. Usando password expiration y política de seguridad
+En un entorno de base de datos más controlado, puedes implementar políticas de seguridad externas o usar herramientas adicionales para asegurarte de que los usuarios cambien sus contraseñas después de un periodo determinado, especialmente en bases de datos que contienen información sensible.
