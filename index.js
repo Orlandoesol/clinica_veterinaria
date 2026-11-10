@@ -6,6 +6,7 @@ import express from 'express'; // Importar el modulo express
 import clienteRouter from './routes/cliente.route.js';
 import publicRouter from './routes/public.route.js';
 import usersRouter from './routes/users.route.js';
+import pacienteRouter from './routes/paciente.route.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -33,6 +34,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', publicRouter);//
 app.use('/api/v1/clientes', clienteRouter);//vista cliente
+app.use('/api/v1/pacientes', pacienteRouter);
 app.use('/api/v1/users', usersRouter);//vista Usuario
 
 
