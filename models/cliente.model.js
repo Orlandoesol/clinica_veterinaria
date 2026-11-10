@@ -1,14 +1,31 @@
-import {db} from '../database/conexion_db.js';
+import { db } from '../database/conexion_db.js';
+
+const ensureClientesTable = async () => {
+    await db.query(`
+        CREATE TABLE IF NOT EXISTS public.clientes (
+            id_cliente INTEGER PRIMARY KEY,
+            nombre VARCHAR(100) NOT NULL,
+            primer_apellido VARCHAR(100) NOT NULL,
+            segundo_apellido VARCHAR(100) NOT NULL,
+            telefono_1 VARCHAR(30) NOT NULL,
+            telefono_2 VARCHAR(30),
+            email VARCHAR(255) UNIQUE NOT NULL
+        );
+    `);
+};
+
 //Metodo Create
-const createCliente = async ({id_cliente, nombre, primer_apellido, segundo_apellido, telefono_1, telefono_2, email}) => {
+const createCliente = async ({ id_cliente, nombre, primer_apellido, segundo_apellido, telefono_1, telefono_2, email }) => {
+    await ensureClientesTable();
+
     const query = {
         text: `
-        INSERT INTO clinica.clientes (id_cliente, nombre, primer_apellido, segundo_apellido, telefono_1, telefono_2, email)
-        VALUES ($1, $2, $3, $4, $5, $6, $7)
-        RETURNING *
+            INSERT INTO public.clientes (id_cliente, nombre, primer_apellido, segundo_apellido, telefono_1, telefono_2, email)
+            VALUES ($1, $2, $3, $4, $5, $6, $7)
+            RETURNING *
         `,
         values: [id_cliente, nombre, primer_apellido, segundo_apellido, telefono_1, telefono_2, email]
-    }
+    };
 
     const { rows } = await db.query(query);
     return rows[0];
@@ -16,115 +33,117 @@ const createCliente = async ({id_cliente, nombre, primer_apellido, segundo_apell
 
 //Metodo Read
 const readCliente = async () => {
-    const result = {
-        text: `
-        SELECT * FROM clinica.clientes`
-    }
-    const { rows } = await db.query(result);
-    return rows
+    await ensureClientesTable();
+
+    const { rows } = await db.query(`
+        SELECT *
+        FROM public.clientes
+        ORDER BY id_cliente ASC
+    `);
+    return rows;
 }
 
 const updateCliente = async (id_cliente, updateFields) => {
-    const setClause = Object.keys(updateFields).map((key, index) => `${key} = $${index + 2}`).join(', ');
+    await ensureClientesTable();
+
+    const keys = Object.keys(updateFields);
+    if (!keys.length) {
+        throw new Error('No hay campos para actualizar');
+    }
+
+    const setClause = keys.map((key, index) => `"${key}" = $${index + 2}`).join(', ');
     const values = [id_cliente, ...Object.values(updateFields)];
 
     const updateQuery = {
         text: `
-        UPDATE clinica.clientes
-        SET ${setClause}
-        WHERE id_cliente = $1
-        RETURNING *
+            UPDATE public.clientes
+            SET ${setClause}
+            WHERE id_cliente = $1
+            RETURNING *
         `,
-        values: values
+        values
     };
 
-    try {
-        const { rows } = await db.query(updateQuery);
-        if (rows.length === 0) {
-            throw new Error('Cliente no encontrado');
-        }
-        return rows[0];
-    } catch (error) {
-        console.error('Error al actualizar el cliente:', error);
-        throw new Error('Error al intentar actualizar el cliente');
+    const { rows } = await db.query(updateQuery);
+    if (rows.length === 0) {
+        throw new Error('Cliente no encontrado');
     }
+
+    return rows[0];
 };
 
 //Buscar o validar por email
 const findOneByEmail = async (email) => {
-    const query = {
-        text: `
-        SELECT * FROM clinica.clientes 
+    await ensureClientesTable();
+
+    const { rows } = await db.query(`
+        SELECT *
+        FROM public.clientes
         WHERE email = $1
-        `,
-        values: [email]//faltaba
-    }
-    const {rows} = await db.query(query, [email]);
+    `, [email]);
     return rows[0];
 }
 //Buscar por ID
 const findById_cliente = async (id_cliente) => {
-    const query = {
-        text: `
-        SELECT * FROM clinica.clientes
+    await ensureClientesTable();
+
+    const { rows } = await db.query(`
+        SELECT *
+        FROM public.clientes
         WHERE id_cliente = $1
-        `,
-        values: [id_cliente]
-    }
-    const { rows } = await db.query(query)
-    return rows[0]
+    `, [id_cliente]);
+    return rows[0];
 }
 //Buscar por ID o email
 const findIdOrEmail = async (query) => {
+    await ensureClientesTable();
+
     let queryText;
     let values;
 
-    // Si el query es un número (id_cliente)
     if (!isNaN(query)) {
         queryText = `
-        SELECT * FROM clinica.clientes 
-        WHERE id_cliente = $1`;
+            SELECT *
+            FROM public.clientes
+            WHERE id_cliente = $1
+        `;
         values = [query];
-    }
-    // Si el query es un email (cadena de texto)
-    else {
+    } else {
         queryText = `
-        SELECT * FROM clinica.clientes 
-        WHERE email = $1`;
-        values = [query];
+            SELECT *
+            FROM public.clientes
+            WHERE email ILIKE $1
+        `;
+        values = [`%${query}%`];
     }
+
     const { rows } = await db.query({
         text: queryText,
-        values: values
+        values
     });
+
     return rows;
 }
 
 //Metodo Delete
 const deleteCliente = async (id_cliente) => {
+    await ensureClientesTable();
+
     const deleteQuery = {
         text: `
-        DELETE FROM clinica.clientes
-        WHERE id_cliente = $1
+            DELETE FROM public.clientes
+            WHERE id_cliente = $1
         `,
         values: [id_cliente]
-    }
-    try {
-        const result = await db.query(deleteQuery);
-        if (result.rowCount === 0) {
-            throw new Error('Cliente no encontrado');
-    }
-     // Si la eliminación fue exitosa, podemos devolver un mensaje o un valor
-        return { success: true, message: 'Cliente eliminado' };
+    };
 
-    }catch (error) {
-        // Manejo de errores en caso de fallos en la consulta
-        console.error('Error al eliminar el cliente:', error);
-        throw new Error('Error al intentar eliminar el cliente');
-        
+    const result = await db.query(deleteQuery);
+    if (result.rowCount === 0) {
+        throw new Error('Cliente no encontrado');
     }
-}
 
+    return { success: true, message: 'Cliente eliminado' };
+};
 
 export const ClientModel = {
     createCliente,
@@ -134,4 +153,4 @@ export const ClientModel = {
     findOneByEmail,
     findById_cliente,
     findIdOrEmail
-}
+};
